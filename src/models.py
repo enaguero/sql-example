@@ -13,6 +13,7 @@ class Person(db.Model):
 
     def serialize(self):
         return {
+            "id": self.id,
             "username": self.username,
             "email": self.email,
             "projects": list(map(lambda x: x.serialize(), self.projects))

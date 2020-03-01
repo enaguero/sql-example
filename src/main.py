@@ -55,6 +55,24 @@ def manage_people():
 
     return jsonify(data), 200
 
+@app.route('/people/<int:person_id>', methods=['PUT', 'GET'])
+def manage_single_person(person_id):
+    body = request.get_json() #{ 'username': 'new_username'}
+    
+    if 'username' not in body:
+        raise APIException('You need to specify the username', status_code=400)
+
+    if request.method == 'PUT':
+        user1 = Person.query.get(person_id)
+        user1.username = body['username']
+        db.session.commit()
+        return jsonify(user1.serialize()), 200
+    if request.method == 'GET':
+        user1 = Person.query.get(person_id)
+        return jsonify(user1.serialize()), 200
+
+    return "Invalid Method", 404
+
 # this only runs if `$ python src/main.py` is executed
 if __name__ == '__main__':
     PORT = int(os.environ.get('PORT', 3000))
